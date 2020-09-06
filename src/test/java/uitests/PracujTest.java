@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.ItJobsPage;
 import pages.LoginPage;
 import pages.MainPage;
 
@@ -19,6 +20,7 @@ public class PracujTest {
     WebDriver driver;
     LoginPage loginPage;
     MainPage mainPage;
+    ItJobsPage itJobsPage;
 
     @Before
     public void setUp()
@@ -33,6 +35,7 @@ public class PracujTest {
         // Create pages
         loginPage = new LoginPage(driver);
         mainPage = new MainPage(driver);
+        itJobsPage = new ItJobsPage(driver);
     }
 
     @Test
@@ -74,6 +77,18 @@ public class PracujTest {
         loginPage.login("test1@test.pl", "test1Password");
 
         assertThat(loginPage.getAlertText()).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    public void checkSeleniumRemoteJobs()
+    {
+        mainPage.clickOnItJobsTab();
+        itJobsPage.clickOnRemoteJobs();
+        itJobsPage.selectSelenium();
+
+        assertThat(itJobsPage.getJobOffersCount())
+                .isGreaterThan(1)
+                .isLessThan(5);
     }
 
     @After

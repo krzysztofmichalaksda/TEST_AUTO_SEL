@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 
 public class MainPage {
     WebDriver driver;
+    String url = "https://www.pracuj.pl";
 
     public MainPage(WebDriver givenDriver)
     {
@@ -15,5 +16,11 @@ public class MainPage {
     {
         By loginLink = By.xpath("//*[@data-test='section-desktopLayout']//a[@data-test='anchor-login']");
         driver.findElement(loginLink).click();
+    }
+
+    public void clickOnItJobsTab()
+    {
+        By itJobsTab = By.xpath("//*[@data-test='section-desktopLayout']//a[@data-test='anchor-codeJobs']");
+        driver.findElement(itJobsTab).click();
     }
 }
