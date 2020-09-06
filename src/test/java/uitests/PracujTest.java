@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.LoginPage;
+import pages.MainPage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +18,7 @@ public class PracujTest {
 
     WebDriver driver;
     LoginPage loginPage;
+    MainPage mainPage;
 
     @Before
     public void setUp()
@@ -30,6 +32,7 @@ public class PracujTest {
         driver.get("https://pracuj.pl");
         // Create pages
         loginPage = new LoginPage(driver);
+        mainPage = new MainPage(driver);
     }
 
     @Test
@@ -65,16 +68,12 @@ public class PracujTest {
     @Test
     public void checkLoginActionNegativePageObject()
     {
-        By loginLink = By.xpath("//*[@data-test='section-desktopLayout']//a[@data-test='anchor-login']");
-        driver.findElement(loginLink).click();
-        By emailInput = By.xpath("//input[@data-test='input-email']");
-
-        loginPage.login("test@test.pl", "testPassword");
-
-        By alertMessage = By.xpath("//*[@data-test='text-feedback-message']");
         String expectedMessage = "Możliwe, że nie potwierdziłeś swojego konta lub 3 razy użyłeś złego hasła. Sprawdź pocztę lub spróbuj później.";
-        String actualMessage = driver.findElement(alertMessage).getText();
-        assertThat(actualMessage).isEqualTo(expectedMessage);
+
+        mainPage.clickOnLoginLink();
+        loginPage.login("test1@test.pl", "test1Password");
+
+        assertThat(loginPage.getAlertText()).isEqualTo(expectedMessage);
     }
 
     @After

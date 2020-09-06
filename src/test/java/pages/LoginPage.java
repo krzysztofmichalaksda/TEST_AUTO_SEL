@@ -13,8 +13,7 @@ public class LoginPage {
         driver = givenDriver;
     }
 
-    public void login(String email, String password)
-    {
+    public void login(String email, String password) {
         By emailInput = By.xpath("//input[@data-test='input-email']");
         driver.findElement(emailInput).sendKeys(email);
 
@@ -23,5 +22,12 @@ public class LoginPage {
 
         By loginButton = By.xpath("//*[@data-test='button-login']");
         driver.findElement(loginButton).click();
+    }
+
+    public String getAlertText()
+    {
+        By alertMessage = By.xpath("//*[@data-test='text-feedback-message']");
+
+        return driver.findElement(alertMessage).getText();
     }
 }
