@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.LoginPage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PracujTest {
 
     WebDriver driver;
+    LoginPage loginPage;
 
     @Before
     public void setUp()
@@ -26,6 +28,8 @@ public class PracujTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("https://pracuj.pl");
+        // Create pages
+        loginPage = new LoginPage(driver);
     }
 
     @Test
@@ -51,6 +55,21 @@ public class PracujTest {
         driver.findElement(passwordInput).sendKeys("HasloJanaKowalskiego");
         By loginButton = By.xpath("//*[@data-test='button-login']");
         driver.findElement(loginButton).click();
+
+        By alertMessage = By.xpath("//*[@data-test='text-feedback-message']");
+        String expectedMessage = "Możliwe, że nie potwierdziłeś swojego konta lub 3 razy użyłeś złego hasła. Sprawdź pocztę lub spróbuj później.";
+        String actualMessage = driver.findElement(alertMessage).getText();
+        assertThat(actualMessage).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    public void checkLoginActionNegativePageObject()
+    {
+        By loginLink = By.xpath("//*[@data-test='section-desktopLayout']//a[@data-test='anchor-login']");
+        driver.findElement(loginLink).click();
+        By emailInput = By.xpath("//input[@data-test='input-email']");
+
+        loginPage.login("test@test.pl", "testPassword");
 
         By alertMessage = By.xpath("//*[@data-test='text-feedback-message']");
         String expectedMessage = "Możliwe, że nie potwierdziłeś swojego konta lub 3 razy użyłeś złego hasła. Sprawdź pocztę lub spróbuj później.";
